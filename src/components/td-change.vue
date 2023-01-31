@@ -13,7 +13,7 @@
 
     </div>
     <div class="tasks">
-      <div class="task" v-for="(task,inx) in nowNodes.tasks" :key="inx">
+      <div class="task"  @click="computed(inx)" v-for="(task,inx) in nowNodes.tasks" :key="inx">
         <div class="text">
           <div class="chek"></div>
           {{ task }}
@@ -31,7 +31,18 @@
     <div class="newTask">
       <button class="btn" @click="addTask" :class="{btn_on:input}">ADD NEW TASK</button>
     </div>
+    <div class="c-tasks">
+      <div class="c-task"  @click="notComputed(inx)" v-for="(task,inx) in nowNodes.completed" :key="inx">
+        <div class="c-text">
+          <div class="c-chek"></div>
+          {{ task }}
+        </div>
+
+        <div @click="delTask(inx)" class="c-del_task">del</div>
+      </div>
     </div>
+    </div>
+   
 
   </section>
 </template>
@@ -49,7 +60,7 @@ data(){
   }
 },
 methods:{
-  ...mapActions(['ADDNODE']),
+  ...mapActions(['ADDNODE','COMPUTED_TO_TASK', 'NOT_COMPUTED_TO_TASK']),
   addTask(){
     if(this.input == false){
       this.input = true
@@ -66,6 +77,12 @@ methods:{
   save(){
     this.$router.push('/')
     
+  },
+  computed(inx){
+    this.COMPUTED_TO_TASK(inx)
+  },
+  notComputed(inx){
+    this.NOT_COMPUTED_TO_TASK(inx)
   }
 },
 computed: mapGetters(['nowNodes'])
@@ -123,9 +140,9 @@ input:focus, textarea:focus, select:focus {
       }  
     }
   }
-  .tasks {
+  .c-tasks {
     font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
-    background: #fff;
+    background: rgb(218, 218, 218);
     border-radius: 15px;
     min-height: 65px;
     .task {
@@ -179,8 +196,44 @@ input:focus, textarea:focus, select:focus {
       top:10px;
     }
   }
-
-
-  
-}
+  .c-tasks {
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    background: rgb(221, 221, 221);
+    border-radius: 15px;
+    min-height: 65px;
+  .c-task {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.185);
+      padding: 10px 20px;
+      display: flex;
+      font-size: 20px;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .c-text{
+      text-decoration:line-through;
+      display: flex;
+      align-items: center;
+      .input{
+        font-size: 20px;
+        padding: 10px;
+        border: 0;
+        width: 33em;
+      }
+    }
+    .c-chek {
+      width: 20px;
+      height: 20px;
+      border: 1px solid #000;
+      background: #000;
+      border-radius: 50%;
+      margin-right: 20px;
+    }
+    .c-del_task {
+      padding: 10px 20px;
+      border-radius: 10px;
+      background: red;
+      color: #fff;
+    }
+  }
+  }
 </style>

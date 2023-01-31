@@ -5,9 +5,9 @@ const store = createStore({
     state(){
         return{
             nodes:[
-                {title: 'One', 'tasks':['hello ', 'my name', 'df']},
-                {title: 'Two', 'tasks':['hello ', 'my name', 'df']},
-                {title: 'Tree', 'tasks':['hello ', 'my name', 'df']},
+                {title: 'One', tasks:['hello ', 'my name', 'df'], completed: ['hello ']},
+                {title: 'Two', tasks:['hello ', 'my name', 'df'], completed: ['my']},
+                {title: 'Tree', tasks:['hello ', 'my name', 'df'], completed: ['hi']},
             ],
             nowNodes: []
         }
@@ -21,6 +21,14 @@ const store = createStore({
         },
         DELNODE(state,inx){
             state.nodes.splice(inx,1)
+        },
+        COMPUTEDTASK(state, task){
+            state.nowNodes.completed.push(state.nowNodes.tasks[task])
+            state.nowNodes.tasks.splice(task,1)
+        },
+        NOTCOMPUTEDTASK(state, task){
+            state.nowNodes.tasks.push(state.nowNodes.completed[task])
+            state.nowNodes.completed.splice(task,1)
         }
     },
     actions:{
@@ -32,6 +40,12 @@ const store = createStore({
         },
         DELITNODE({commit},inx){
             commit('DELNODE',inx)
+        },
+        COMPUTED_TO_TASK({commit}, task){
+            commit('COMPUTEDTASK', task)
+        },
+        NOT_COMPUTED_TO_TASK({commit}, task){
+            commit('NOTCOMPUTEDTASK', task)
         }
 
     },

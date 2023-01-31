@@ -43,7 +43,7 @@ name:'td-tasks',
 data(){
   return{
     input:false,
-    node:{title:'', tasks: []},
+    node:{title:'', tasks: [],completed:[]},
     input_now: null,
     error: null
   }
