@@ -4,7 +4,7 @@
     <h1 style="color:red;text-align: center;">{{ error }}</h1>
       <div class="title">
       <!-- <h2>title</h2> -->
-      <input v-model="node.title" class="input" type="text" placeholder="Title" autofocus>
+      <input v-model="nowNodes.title" class="input" type="text" placeholder="Title" autofocus>
         <!-- <p>{{ this.$store.state.nodes }}</p> -->
       <div class="btns">
         <div class="del">&#9746;</div>
@@ -13,7 +13,7 @@
 
     </div>
     <div class="tasks">
-      <div class="task" v-for="(task,inx) in node.tasks" :key="inx">
+      <div class="task" v-for="(task,inx) in nowNodes.tasks" :key="inx">
         <div class="text">
           <div class="chek"></div>
           {{ task }}
@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
 name:'td-tasks',
 data(){
@@ -55,28 +55,20 @@ methods:{
       this.input = true
     }else{ 
       if(this.input_now.length > 0){
-        this.node.tasks.push(this.input_now)
+        this.nowNodes.tasks.push(this.input_now)
         this.input_now = null
       }
     }
   },
   delTask(inx){
-    this.node.tasks.splice(inx,1)
+    this.nowNodes.tasks.splice(inx,1)
   },
   save(){
-    if(this.node.title.length >= 1 && this.node.tasks.length>=1){
-      this.ADDNODE(this.node)
-      this.$router.push('/')
-    }else{
-      this.error = 'заполните Ноду'
-
-      setTimeout(()=>{
-        this.error = ''
-      }, 3000)
-    }
+    this.$router.push('/')
     
   }
-}
+},
+computed: mapGetters(['nowNodes'])
 }
 </script>
 

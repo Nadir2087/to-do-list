@@ -14,12 +14,16 @@
                 <div class="node" v-for="(nade,inx) in allNodes" :key="inx">
                     <h3 class="title">{{ nade.title }}</h3>
                     <ul>
-                        <li>{{nade.tasks[0]}}</li>
-                        <li>{{nade.tasks[1]}}</li>
-                        <li>{{nade.tasks[2]}}</li>
+                        <li><span class="clik"></span>{{nade.tasks[0]}}</li>
+                        <li><span class="clik"></span>{{nade.tasks[1]}}</li>
+                        <li><span class="clik"></span>{{nade.tasks[2]}}</li>
                     </ul>
-                    <p></p>
+                        <div class="btns">
+                            <div @click="change(inx)" class="change">change</div>
+                            <div class="del">del</div>
+                        </div>
                 </div>
+    
             </div>
         </div>
     </div>
@@ -27,15 +31,37 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 export default {
     name:"td-home",
-    computed:mapGetters(['allNodes'])
+    data(){
+        return{
+        }
+    },
+    methods:{
+        ...mapActions(['CHANGENODE']),
+
+        change(inx){
+            this.CHANGENODE(this.allNodes[inx])
+            this.$router.push('/change/'+inx)
+            // this.CHANGENODE('hello')
+        }
+    },  
+    computed:mapGetters(['allNodes','nowNodes'])
 
 }
 </script >
 
 <style lang="scss">
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
 .td-home{
     font-family: 'Roboto', sans-serif;
     .container{
@@ -80,11 +106,12 @@ export default {
                 flex-wrap: wrap;
                 padding: 20px;
                 .node{
+                    cursor: pointer;
                     box-sizing: border-box;
                     padding: 10px;
                     width: 200px;
                     margin: 10px 16px;
-                    height: 180px;
+                    // height: 180px;
                     background: #fff;
                     box-shadow: 0 4px 10px #7777;
 
@@ -99,13 +126,43 @@ export default {
                         font-size: 20px;
                         padding: 0;
                         li{
+                            display: flex;
+                            align-items: center;
                             border-bottom: 1px solid rgba(0, 0, 0, 0.123);
                             margin: 0 0 10px 0;
                             list-style: none;
+                            .clik{
+                                width: 10px;
+                                height: 10px;
+                                border: 3px solid #000;
+                                border-radius: 50%;
+                                margin-right: 10px;
+                            }
                         }
+                    }
+                    .btns{
+                        display: flex;
+                        justify-content: space-between;
+                    }
+                }
+                .btns {
+                    color: #fff;
+                    div{
+                        border-radius: 10px;
+                        text-align: center;
+                        padding: 10px;
+                        width: 55px;
+                    }
+                    .change {
+                        background: rgb(5, 144, 168);
+                    }
+                    .del {
+                        background: rgb(202, 103, 103);
                     }
                 }
             }
+            
+            
         }
     }
 }
