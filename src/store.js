@@ -18,6 +18,9 @@ const store = createStore({
         },
         NOWNODE(state,node){
             state.nowNodes = node
+        },
+        DELNODE(state,inx){
+            state.nodes.splice(inx,1)
         }
     },
     actions:{
@@ -26,6 +29,9 @@ const store = createStore({
         },
         CHANGENODE({commit}, node){
             commit('NOWNODE',node)
+        },
+        DELITNODE({commit},inx){
+            commit('DELNODE',inx)
         }
 
     },

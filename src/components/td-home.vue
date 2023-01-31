@@ -9,6 +9,7 @@
                 </div>
             </div>
         </header>
+        {{ j }}
         <div class="node_board">
             <div class="node_board-container">
                 <div class="node" v-for="(nade,inx) in allNodes" :key="inx">
@@ -20,7 +21,7 @@
                     </ul>
                         <div class="btns">
                             <div @click="change(inx)" class="change">change</div>
-                            <div class="del">del</div>
+                            <div @click="delNode(inx)" class="del">del</div>
                         </div>
                 </div>
     
@@ -39,12 +40,15 @@ export default {
         }
     },
     methods:{
-        ...mapActions(['CHANGENODE']),
+        ...mapActions(['CHANGENODE','DELITNODE']),
 
         change(inx){
             this.CHANGENODE(this.allNodes[inx])
             this.$router.push('/change/'+inx)
             // this.CHANGENODE('hello')
+        },
+        delNode(inx){
+            this.DELITNODE(inx)
         }
     },  
     computed:mapGetters(['allNodes','nowNodes'])
