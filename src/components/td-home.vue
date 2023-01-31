@@ -5,27 +5,20 @@
             <div class="header-container">
                 <div class="header-logo">TO_DO</div>
                 <div class="add-node">
-                    <button class="btn">Add Node</button>
+                    <router-link to="/tasks" class="btn">Add Node</router-link>
                 </div>
             </div>
         </header>
         <div class="node_board">
             <div class="node_board-container">
-                <div class="node">
-                    <h3 class="title">my Node</h3>
+                <div class="node" v-for="(nade,inx) in allNodes" :key="inx">
+                    <h3 class="title">{{ nade.title }}</h3>
                     <ul>
-                        <li>list1</li>
-                        <li>list2</li>
-                        <li>list3</li>
+                        <li>{{nade.tasks[0]}}</li>
+                        <li>{{nade.tasks[1]}}</li>
+                        <li>{{nade.tasks[2]}}</li>
                     </ul>
-                </div>
-                <div class="node">
-                    <h3 class="title">my Node</h3>
-                    <ul>
-                        <li>list1</li>
-                        <li>list2</li>
-                        <li>list3</li>
-                    </ul>
+                    <p></p>
                 </div>
             </div>
         </div>
@@ -34,14 +27,15 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
-    name:"td-home"
+    name:"td-home",
+    computed:mapGetters(['allNodes'])
 
 }
 </script >
 
 <style lang="scss">
-  @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 .td-home{
     font-family: 'Roboto', sans-serif;
     .container{
@@ -69,6 +63,7 @@ export default {
                 .add-node{
                     .btn{
                         cursor: pointer;
+                        text-decoration: none;
                         padding: 10px;
                         border: 0 ;
                         border-radius: 10px;
@@ -97,14 +92,16 @@ export default {
                         font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
                         margin: 0;
                         padding: 0;
-                        font-size: 20px;
+                        font-size: 25px;
                         text-align: center;
                     }
                     ul {
+                        font-size: 20px;
                         padding: 0;
                         li{
-                        margin: 0 0 5px 0;
-                        list-style: none;
+                            border-bottom: 1px solid rgba(0, 0, 0, 0.123);
+                            margin: 0 0 10px 0;
+                            list-style: none;
                         }
                     }
                 }
