@@ -7,7 +7,7 @@
       <input v-model="node.title" class="input" type="text" placeholder="Title" autofocus>
         <!-- <p>{{ this.$store.state.nodes }}</p> -->
       <div class="btns">
-        <div class="del">&#9746;</div>
+        <div @click="warning = true" class="del">&#9746;</div>
       <div  @click="save" class="seve">save</div>
       </div>
 
@@ -32,12 +32,24 @@
       <button class="btn" @click="addTask" :class="{btn_on:input}">ADD NEW TASK</button>
     </div>
     </div>
+    <transition>
+      <div class="bg" v-if="warning">
+        <div class="win">
+            <div class="warning"><p>Вы точно хотите выйти не сохранив ваши записи?</p></div>
+            <div class="win_btns">
+            <router-link style="text-decoration: none;" to="/" class="div yes">Yes</router-link>
+            <div @click="warning=false" class="div no">No</div>
+          </div>
+      </div>
+    </div>
+    </transition>
 
   </section>
+
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
 name:'td-tasks',
 data(){
@@ -45,7 +57,8 @@ data(){
     input:false,
     node:{title:'', tasks: [],completed:[]},
     input_now: null,
-    error: null
+    error: null,
+    warning: false
   }
 },
 methods:{
@@ -66,6 +79,8 @@ methods:{
   save(){
     if(this.node.title.length >= 1 && this.node.tasks.length>=1){
       this.ADDNODE(this.node)
+      // this.saveNodes()
+      // localStorage.nodes.push(this.nod
       this.$router.push('/')
     }else{
       this.error = 'заполните Ноду'
@@ -75,8 +90,13 @@ methods:{
       }, 3000)
     }
     
-  }
-}
+  },
+  // saveNodes() {
+  //     const parsed = JSON.stringify([this.allNodes]);
+  //     localStorage.setItem('nodes', parsed);
+  //   }
+},
+computed: mapGetters(['allNodes'])
 }
 </script>
 
@@ -187,8 +207,57 @@ input:focus, textarea:focus, select:focus {
       top:10px;
     }
   }
+  .bg {
+    position: absolute;
+    top: 0;right: 0;
+    background: rgba(99, 99, 99, 0.37);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  .win {
+    border-radius: 15px;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    width: 400px;
+    height: 300px;
+    background: #fff;
+    .warning {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 80%;
+      font-size: 25px;
+      text-align: center;
+    }
+    .win_btns {
+      height: 20%;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      justify-content: space-between;
+      .div{
+        border-radius: 10px;
+        margin-bottom: 20px;
+        cursor: pointer;
+        width: 70px;
+        text-align: center;
+        padding: 10px 0;
+        color: #fff;
+      }
+      .yes {
+        background: red;
+      }
+      .no {
+        background: green;
+      }
 
 
-  
+    }
+  }
+ 
 }
+
+}
+
 </style>

@@ -9,7 +9,6 @@
                 </div>
             </div>
         </header>
-        {{ j }}
         <div class="node_board">
             <div class="node_board-container">
                 <div class="node" v-for="(nade,inx) in allNodes" :key="inx">
@@ -21,13 +20,24 @@
                     </ul>
                         <div class="btns">
                             <div @click="change(inx)" class="change">change</div>
-                            <div @click="delNode(inx)" class="del">del</div>
+                            <div @click="warning(inx)" class="del">del</div>
                         </div>
                 </div>
     
             </div>
         </div>
     </div>
+    <transition>
+      <div class="bg" v-if="war">
+        <div class="win">
+            <div class="warning"><p>Вы точно хотите удалить ваши записи?</p></div>
+            <div class="win_btns">
+            <div @click="delNode(warningInx)" class="div yes">Yes</div>
+            <div @click="war=false" class="div no">No</div>
+          </div>
+      </div>
+    </div>
+    </transition>
   </section>
 </template>
 
@@ -37,10 +47,12 @@ export default {
     name:"td-home",
     data(){
         return{
+            war: false,
+            warningInx:null
         }
     },
     methods:{
-        ...mapActions(['CHANGENODE','DELITNODE']),
+        ...mapActions(['CHANGENODE','DELITNODE', 'LOK_NODE']),
 
         change(inx){
             this.CHANGENODE(this.allNodes[inx])
@@ -49,10 +61,26 @@ export default {
         },
         delNode(inx){
             this.DELITNODE(inx)
+            this.war = false
+        },
+        warning(inx){
+            this.war = true
+            this.warningInx = inx
         }
     },  
-    computed:mapGetters(['allNodes','nowNodes'])
-
+    computed:mapGetters(['allNodes','nowNodes']),
+    // mounted(){
+    //     if (localStorage.getItem('nodes')) {
+    //         try {
+    //             let c = JSON.parse(localStorage.getItem('nodes'))
+    //             // this.$store.state.nodes = JSON.parse(localStorage.getItem('nodes'));
+    //             this.LOK_NODE(c);
+    //         } catch(e) {
+    //             localStorage.removeItem('nodes');
+    //         }
+    //     }
+        
+    //     }
 }
 </script >
 
@@ -110,6 +138,7 @@ export default {
                 flex-wrap: wrap;
                 padding: 20px;
                 .node{
+                    overflow: hidden;
                     cursor: pointer;
                     box-sizing: border-box;
                     padding: 10px;
@@ -169,5 +198,55 @@ export default {
             
         }
     }
+    .bg {
+    position: absolute;
+    top: 0;right: 0;z-index: 9;
+    background: rgba(99, 99, 99, 0.37);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  .win {
+    border-radius: 15px;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    width: 400px;
+    height: 300px;
+    background: #fff;
+    .warning {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 80%;
+      font-size: 25px;
+      text-align: center;
+    }
+    .win_btns {
+      height: 20%;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      justify-content: space-between;
+      .div{
+        border-radius: 10px;
+        margin-bottom: 20px;
+        cursor: pointer;
+        width: 70px;
+        text-align: center;
+        padding: 10px 0;
+        color: #fff;
+      }
+      .yes {
+        background: red;
+      }
+      .no {
+        background: green;
+      }
+
+
+    }
+  }
+ 
+}
 }
 </style>

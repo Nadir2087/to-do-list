@@ -7,14 +7,14 @@
       <input v-model="nowNodes.title" class="input" type="text" placeholder="Title" autofocus>
         <!-- <p>{{ this.$store.state.nodes }}</p> -->
       <div class="btns">
-        <div class="del">&#9746;</div>
+        <div @click="war=true" class="del">&#9746;</div>
       <div  @click="save" class="seve">save</div>
       </div>
 
     </div>
     <div class="tasks">
-      <div class="task"  @click="computed(inx)" v-for="(task,inx) in nowNodes.tasks" :key="inx">
-        <div class="text">
+      <div class="task"  v-for="(task,inx) in nowNodes.tasks" :key="inx">
+        <div class="text"  @click="computed(inx)">
           <div class="chek"></div>
           {{ task }}
         </div>
@@ -32,8 +32,8 @@
       <button class="btn" @click="addTask" :class="{btn_on:input}">ADD NEW TASK</button>
     </div>
     <div class="c-tasks">
-      <div class="c-task"  @click="notComputed(inx)" v-for="(task,inx) in nowNodes.completed" :key="inx">
-        <div class="c-text">
+      <div class="c-task"  v-for="(task,inx) in nowNodes.completed" :key="inx">
+        <div class="c-text" >
           <div class="c-chek"></div>
           {{ task }}
         </div>
@@ -42,7 +42,17 @@
       </div>
     </div>
     </div>
-   
+    <transition>
+      <div class="bg" v-if="war">
+        <div class="win">
+            <div class="warning"><p>Вы точно хотите удалить ваши записи?</p></div>
+            <div class="win_btns">
+            <div @click="delThisNode($route.params.inx)" class="div yes">Yes</div>
+            <div @click="war=false" class="div no">No</div>
+          </div>
+      </div>
+    </div>
+    </transition>
 
   </section>
 </template>
@@ -56,11 +66,12 @@ data(){
     input:false,
     node:{title:'', tasks: []},
     input_now: null,
-    error: null
+    error: null,
+    war: false
   }
 },
 methods:{
-  ...mapActions(['ADDNODE','COMPUTED_TO_TASK', 'NOT_COMPUTED_TO_TASK']),
+  ...mapActions(['ADDNODE','COMPUTED_TO_TASK', 'NOT_COMPUTED_TO_TASK', 'DELITNODE']),
   addTask(){
     if(this.input == false){
       this.input = true
@@ -83,6 +94,10 @@ methods:{
   },
   notComputed(inx){
     this.NOT_COMPUTED_TO_TASK(inx)
+  },
+  delThisNode(inx){
+    this.DELITNODE(inx)
+    this.$router.push('/')
   }
 },
 computed: mapGetters(['nowNodes'])
@@ -235,5 +250,55 @@ input:focus, textarea:focus, select:focus {
       color: #fff;
     }
   }
+  .bg {
+    position: absolute;
+    top: 0;right: 0;z-index: 9;
+    background: rgba(99, 99, 99, 0.37);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  .win {
+    border-radius: 15px;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    width: 400px;
+    height: 300px;
+    background: #fff;
+    .warning {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 80%;
+      font-size: 25px;
+      text-align: center;
+    }
+    .win_btns {
+      height: 20%;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      justify-content: space-between;
+      .div{
+        border-radius: 10px;
+        margin-bottom: 20px;
+        cursor: pointer;
+        width: 70px;
+        text-align: center;
+        padding: 10px 0;
+        color: #fff;
+      }
+      .yes {
+        background: red;
+      }
+      .no {
+        background: green;
+      }
+
+
+    }
   }
+ 
+}
+}
 </style>

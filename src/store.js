@@ -1,14 +1,11 @@
-import { createStore } from 'vuex'
+import { createStore } from 'vuex';
+import createPersistedState from 'vuex-persistedstate';
 
 
 const store = createStore({
     state(){
         return{
-            nodes:[
-                {title: 'One', tasks:['hello ', 'my name', 'df'], completed: ['hello ']},
-                {title: 'Two', tasks:['hello ', 'my name', 'df'], completed: ['my']},
-                {title: 'Tree', tasks:['hello ', 'my name', 'df'], completed: ['hi']},
-            ],
+            nodes:[],
             nowNodes: []
         }
     },
@@ -29,9 +26,15 @@ const store = createStore({
         NOTCOMPUTEDTASK(state, task){
             state.nowNodes.tasks.push(state.nowNodes.completed[task])
             state.nowNodes.completed.splice(task,1)
+        },
+        LOK(state, nod){
+            state.nodes = nod
         }
     },
     actions:{
+        LOK_NODE({commit}, node){
+            commit('LOK', node)
+        },
         ADDNODE({commit},node){
             commit('ADDNODETONODES', node)
         },
@@ -56,7 +59,8 @@ const store = createStore({
         nowNodes(state){
             return state.nowNodes
         }
-    }
+    },
+    plugins: [createPersistedState()]
 })
 
 export default store
