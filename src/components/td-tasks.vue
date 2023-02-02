@@ -3,9 +3,7 @@
     <div class="container">
     <h1 style="color:red;text-align: center;">{{ error }}</h1>
       <div class="title">
-      <!-- <h2>title</h2> -->
       <input v-model="node.title" class="input" type="text" placeholder="Title" autofocus>
-        <!-- <p>{{ this.$store.state.nodes }}</p> -->
       <div class="btns">
         <div @click="warning = true" class="del">&#9746;</div>
       <div  @click="save" class="seve">save</div>
@@ -79,8 +77,6 @@ methods:{
   save(){
     if(this.node.title.length >= 1 && this.node.tasks.length>=1){
       this.ADDNODE(this.node)
-      // this.saveNodes()
-      // localStorage.nodes.push(this.nod
       this.$router.push('/')
     }else{
       this.error = 'заполните Ноду'
@@ -91,10 +87,6 @@ methods:{
     }
     
   },
-  // saveNodes() {
-  //     const parsed = JSON.stringify([this.allNodes]);
-  //     localStorage.setItem('nodes', parsed);
-  //   }
 },
 computed: mapGetters(['allNodes'])
 }
