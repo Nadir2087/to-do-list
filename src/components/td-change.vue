@@ -3,9 +3,7 @@
     <div class="container">
     <h1 style="color:red;text-align: center;">{{ error }}</h1>
       <div class="title">
-      <!-- <h2>title</h2> -->
-      <input v-model="nowNodes.title" class="input" type="text" placeholder="Title" autofocus>
-        <!-- <p>{{ this.$store.state.nodes }}</p> -->
+      <input v-model="nowNodes.title" class="input" type="text" placeholder="Title">
       <div class="btns">
         <div @click="war=true" class="del">&#9746;</div>
       <div  @click="save" class="seve">save</div>
@@ -33,12 +31,12 @@
     </div>
     <div class="c-tasks">
       <div class="c-task"  v-for="(task,inx) in nowNodes.completed" :key="inx">
-        <div class="c-text" >
+        <div class="c-text" @click="notComputed(inx)">
           <div class="c-chek"></div>
           {{ task }}
         </div>
 
-        <div @click="delTask(inx)" class="c-del_task">del</div>
+        <div @click="delComputedTask(inx)" class="c-del_task">del</div>
       </div>
     </div>
     </div>
@@ -64,7 +62,7 @@ name:'td-tasks',
 data(){
   return{
     input:false,
-    node:{title:'', tasks: []},
+    node:this.nowNodes,
     input_now: null,
     error: null,
     war: false
@@ -85,6 +83,9 @@ methods:{
   delTask(inx){
     this.nowNodes.tasks.splice(inx,1)
   },
+  delComputedTask(inx){
+    this.nowNodes.completed.splice(inx,1)
+  },
   save(){
     this.$router.push('/')
     
@@ -100,7 +101,7 @@ methods:{
     this.$router.push('/')
   }
 },
-computed: mapGetters(['nowNodes'])
+computed: mapGetters(['nowNodes','allNodes']),
 }
 </script>
 
@@ -186,6 +187,7 @@ input:focus, textarea:focus, select:focus {
       margin-right: 20px;
     }
     .del_task {
+      cursor: pointer;
       padding: 10px 20px;
       border-radius: 10px;
       background: red;
@@ -198,6 +200,7 @@ input:focus, textarea:focus, select:focus {
     width: 100%;
     margin: 0 auto;
     .btn {
+      cursor: pointer;
       position: relative;
       top: -25px;
       padding: 20px;
@@ -244,6 +247,7 @@ input:focus, textarea:focus, select:focus {
       margin-right: 20px;
     }
     .c-del_task {
+      cursor: pointer;
       padding: 10px 20px;
       border-radius: 10px;
       background: red;
